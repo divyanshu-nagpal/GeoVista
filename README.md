@@ -42,6 +42,4 @@ Watch the functionality of GeoVista in action:
 [![image](https://github.com/user-attachments/assets/b50b1ea1-881c-4a88-9ad1-4c90838fab9b)](https://youtu.be/xkK47dYwpsM)
 
 
-*[Click Here To Watch The Video](https://youtu.be/xkK47dYwpsM)*
-
 ---
