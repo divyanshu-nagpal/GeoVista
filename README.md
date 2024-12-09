@@ -40,7 +40,8 @@ GeoVista is built using the latest tools and frameworks to ensure a smooth, effi
 ### 🎥 Demo Video
 Watch the functionality of GeoVista in action:  
 [![GeoVista Demo Video]()](video-link)
-src/assets/images/thumbnail.png
+![image](https://github.com/user-attachments/assets/b50b1ea1-881c-4a88-9ad1-4c90838fab9b)
+
 
 *[Click Here To Watch The Video](https://youtu.be/xkK47dYwpsM)*
 
