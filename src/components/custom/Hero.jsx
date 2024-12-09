@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
-import heroimg from '../../assets/images/bg1.jpg';
+// import heroimg from '../../assets/images/bg1.jpg';
+import heroVideo from '../../assets/images/bbb1.mp4';
 import {
   Dialog,
   DialogContent,
@@ -54,11 +55,22 @@ function Hero() {
       {/* Background image section */}
       <div className="relative w-full h-screen overflow-hidden">
         {/* Background image */}
-        <img
+        {/* <img
           src={heroimg}
           alt="Beautiful travel destination landscape"
           className="absolute inset-0 object-cover w-full h-full brightness-75" // Slightly reduced brightness for better contrast
-        />
+        /> */}
+         {/* Background Video */}
+         <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 object-cover w-full h-full brightness-75"
+        >
+          <source src={heroVideo} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60"></div>
 

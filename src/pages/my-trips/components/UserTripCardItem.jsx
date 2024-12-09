@@ -15,35 +15,26 @@ import {
 import { Link } from 'react-router-dom';
 import { SelectTravelList } from '@/constants/options';
 import { deleteTrip } from '@/service/firebase-services';
+import { GetPlaceDetails, PHOTO_REF_URL } from '@/service/GlobalApi';
 
 const UserTripCardItem = ({ trip, onDelete }) => {
   const [photoUrl, setPhotoUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-
   const GetPlacePhoto = async () => {
-    setIsLoading(true);
-    const data = {
-      textQuery: trip?.userSelection?.location?.label,
-    };
-
     try {
-      const result = await GetPlaceDetails(data);
-
-      if (result?.places?.length > 0) {
-        const photoName = result.places[0].photos[0]?.name;
-        if (photoName) {
-          const url = PHOTO_REF_URL.replace('{NAME}', photoName);
-          setPhotoUrl(url);
-        }
+      const data = { textQuery: trip?.userSelection?.location?.label }
+      const resp = await GetPlaceDetails(data);
+      
+      if (resp.data.places && resp.data.places[0].photos) {
+        const PhotoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[1].name);
+        setPhotoUrl(PhotoUrl);
       }
     } catch (error) {
-      console.error('Error fetching photo:', error);
-    } finally {
-      setIsLoading(false);
+      console.error("Error fetching photo:", error);
     }
-  };
+  }
 
   useEffect(() => {
     if (trip) {
@@ -77,7 +68,7 @@ const UserTripCardItem = ({ trip, onDelete }) => {
               <div className="flex items-start gap-2 min-w-0 max-w-[80%]">
                 <MapPin className="h-4 w-4 mt-1 flex-shrink-0 text-slate-500" />
                 <h3 className="font-semibold text-lg leading-tight truncate">
-                  {trip?.userSelection?.location?.label?.split(',')[0] || 'Unknown'}
+                  {trip?.userSelection?.location?.label?.split(/[,\-|•\/\(\)]/)[0]?.trim() || 'Unknown'}
                 </h3>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
@@ -99,14 +90,10 @@ const UserTripCardItem = ({ trip, onDelete }) => {
           </div>
 
           <div className="relative w-full overflow-hidden rounded-lg mb-4">
-            {isLoading ? (
-              <div className="flex h-[220px] w-full items-center justify-center bg-white/50">
-                <Loader2 className="h-6 w-6 animate-spin text-orange-600" />
-              </div>
-            ) : (
+            {(
               <div className="w-full overflow-hidden rounded-xl border-2">
                 <img
-                  src={photoUrl || 'placeholder.jpg'}
+                  src={photoUrl || '/placeholder.jpg'} 
                   className="object-cover w-full h-[220px]"
                   alt="Trip" 
                 />
@@ -127,7 +114,7 @@ const UserTripCardItem = ({ trip, onDelete }) => {
               </div>
             </div>
             <Link to={`/view-trip/${trip?.id}`} className="block">
-              <Button size="sm" className="w-full bg-white text-slate-700 hover:bg-slate-50">
+              <Button size="sm" className="w-full bg-white text-slate-700 hover:bg-orange-500 hover:text-white">
                 View Itinerary
               </Button>
             </Link>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -9,8 +9,11 @@ import RecentTrips from './components/RecentTrips';
 
 const DashboardHome = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-6 mb-10">
       {/* AI Assistant Floating Card */}
       <div className="max-w-6xl mx-auto mb-8">
         <Card className="bg-white/70 backdrop-blur-lg border border-slate-200 shadow-xl">
@@ -28,10 +31,6 @@ const DashboardHome = () => {
                   onClick={() => navigate("/create-trip")}>
                     <Sparkles className="h-4 w-4 mr-2" />
                     Start AI Planning
-                  </Button>
-                  <Button variant="outline" className="border-slate-200 hover:border-orange-200" onClick={() => navigate("/")}>
-                    <Image className="h-4 w-4 mr-2" />
-                    Visual Discovery
                   </Button>
                 </div>
               </div>

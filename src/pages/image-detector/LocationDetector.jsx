@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Camera, MapPin, Building2, Landmark, Navigation, ImagePlus } from 'lucide-react';
@@ -10,6 +10,10 @@ const LocationDetector = () => {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
 
   // ... (keeping all the handlers the same)
   const handleImageChange = (e) => {

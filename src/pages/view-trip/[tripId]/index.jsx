@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import InfoSection from '../components/InfoSection';
 import Hotels from '../components/Hotels';
 import PlacesToVisit from '../components/PlacesToVisit';
-import Footer from '../components/Footer';
+
 
 function Viewtrip() {
     const {tripId}=useParams();
@@ -14,6 +14,10 @@ function Viewtrip() {
     useEffect(()=>{
         tripId&&GetTripData();
     },[tripId])
+
+    useEffect(() => {
+        window.scrollTo(0, 0); 
+      }, []);
 
     // Used to get trip information from firebase
     const GetTripData=async()=>{
@@ -40,8 +44,6 @@ function Viewtrip() {
         {/* {Daily Plan} */}
         <PlacesToVisit trip={trip}/>
 
-        {/* Footer */}
-        <Footer/>
     </div>
   )
 }

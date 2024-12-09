@@ -89,6 +89,7 @@ const Header = ({ router }) => {
     const homeRoute = "/";
     setActiveRoute(homeRoute);
     router.navigate(homeRoute);
+    window.location.reload();
   };
 
   // Function to handle navigation and active state
@@ -118,7 +119,7 @@ const Header = ({ router }) => {
               onClick={handleLogoClick}
             >
               <h1 className="text-4xl font-light tracking-tight text-gray-900">
-                Location<span className="font-bold text-orange-500">Scout</span>
+              Geo<span className="font-bold text-orange-500">Vista</span>
               </h1>
             </div>
 
@@ -217,24 +218,23 @@ const Header = ({ router }) => {
                       Sign In
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>Sign In</DialogTitle>
-                      <DialogDescription>
-                        Access your account securely with Google authentication.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex justify-center py-4">
-                      <Button
-                        variant="outline"
-                        className="w-full flex items-center justify-center gap-2"
-                        onClick={() => login()}
-                      >
-                        <FcGoogle size={20} />
-                        Sign In with Google
-                      </Button>
-                    </div>
-                  </DialogContent>
+                  <DialogContent>
+          <DialogHeader>
+            <DialogDescription className="text-center">
+              <img src="logo.svg" alt="Logo" className="mx-auto mb-4" />
+              <h2 className="font-bold text-xl">Sign In with Google</h2>
+              <p className="text-gray-600 text-sm">
+                Access your account securely with Google authentication.
+              </p>
+              <Button
+                onClick={login}
+                className="w-full mt-5 flex items-center gap-3 bg-black text-white hover:bg-gray-800"
+              >
+                <FcGoogle className="h-6 w-6" /> Sign In with Google
+              </Button>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
                 </Dialog>
               )}
             </div>

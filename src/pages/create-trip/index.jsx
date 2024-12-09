@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { AI_PROMPT, SelectBudgetOptions, SelectTravelList } from "@/constants/options";
-import { toast } from "@/hooks/use-toast";
+import { toast, useToast } from "@/hooks/use-toast";
 import { chatSession } from '@/service/AIModal';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { doc, setDoc } from "firebase/firestore";
@@ -38,8 +38,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import MonthsCalendar from './MonthsCalendar';
-import { format } from 'date-fns';
-
+import LoaderPage from '@/components/custom/loader';
 
 const CreateTrip = () => {
   const navigate = useNavigate();
@@ -49,6 +48,7 @@ const CreateTrip = () => {
   // const [activeSection, setActiveSection] = useState(0);
   // const [formData, setFormData] = useState({month: "",});
   const [isMonthModalOpen, setMonthModalOpen] = useState(false);
+
 
   const selectedMonth = formData.month ? formData.month : null;
 
@@ -68,15 +68,14 @@ const CreateTrip = () => {
     { ...SelectTravelList[0], icon: PersonStanding },
     { ...SelectTravelList[1], icon: Heart },
     { ...SelectTravelList[2], icon: UsersGroup },
-    { 
-      title: "Friend Group",
-      people: "5-10 Friends",
-      icon: UserPlus,
-      description: "Perfect for a memorable group adventure"
-    }
+    { ...SelectTravelList[3], icon: UserPlus }
   ];
 
   const locationIcons = [Building, Palmtree, Mountain];
+
+  useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, []);
 
   useEffect(() => {
     console.log(formData);
@@ -138,34 +137,48 @@ const CreateTrip = () => {
       return;
     }
 
-    setLoading(true);
+  
+    setLoading(true); // Show loader
+  
     const FINAL_PROMPT = AI_PROMPT
       .replace('{place}', formData?.location?.label)
       .replace('{totalDays}', formData?.noOfDays)
       .replace('{traveler}', formData?.traveler)
       .replace('{budget}', formData?.budget)
       .replace('{totalDays}', formData?.noOfDays);
-
-    const result = await chatSession.sendMessage(FINAL_PROMPT);
-    console.log(result?.response?.text());
-    setLoading(false);
-    SaveAiTrip(result?.response?.text());
+  
+    try {
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      SaveAiTrip(result?.response?.text());
+    } catch (error) {
+      console.error("Error generating trip:", error);
+      toast.error("An error occurred while generating the trip.");
+      setLoading(false);
+    }
   };
+  
+  
 
   const SaveAiTrip = async (TripData) => {
-    setLoading(true);
-    const user = JSON.parse(localStorage.getItem('user'));
-    const docId = Date.now().toString();
-    await setDoc(doc(db, "AITrips", docId), {
-      userSelection: formData,
-      tripData: JSON.parse(TripData),
-      userEmail: user?.email,
-      id: docId
-    });
-    setLoading(false);
-    navigate('/view-trip/' + docId);
-    window.location.reload();
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const docId = Date.now().toString();
+      await setDoc(doc(db, "AITrips", docId), {
+        userSelection: formData,
+        tripData: JSON.parse(TripData),
+        userEmail: user?.email,
+        id: docId
+      });
+      navigate('/view-trip/' + docId);
+    } catch (error) {
+      console.error("Error saving trip:", error);
+      toast.error("An error occurred while saving the trip.");
+    } finally {
+      setLoading(false); // Hide loader
+    }
   };
+  
+
 
   const reset = () => {
     setPlace(null);
@@ -178,8 +191,11 @@ const CreateTrip = () => {
   };
 
 
-  return (
-    <div className="min-h-screen p-6">
+    if (loading) {
+      return <LoaderPage />;
+    }
+    return (
+    <div className={`min-h-screen p-6 transition-all duration-300 ${isMonthModalOpen ? "filter blur-sm" : ""}`}>
       <div className="max-w-4xl mx-auto">
         {/* Enhanced Header */}
         <div className="text-center mb-16 space-y-4">
@@ -304,7 +320,7 @@ const CreateTrip = () => {
           <CardContent className="p-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-3 bg-orange-50 rounded-full">
-              <CalendarDays className="w-6 h-6 text-orange-500" />
+              <CalendarDays className="w-6 h-6 text-orange-600" />
               </div>
               <h2 className="text-2xl font-medium text-gray-900">
                 How long is your adventure?
@@ -330,7 +346,7 @@ const CreateTrip = () => {
           <CardContent className="p-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-3 bg-orange-50 rounded-full">
-                <Wallet className="w-6 h-6 text-orange-500" />
+                <Wallet className="w-6 h-6 text-orange-600" />
               </div>
               <h2 className="text-2xl font-medium text-gray-900">
                 What's your budget range?
@@ -343,13 +359,13 @@ const CreateTrip = () => {
                   onClick={() => handleInputChange("budget", item.title)}
                   className={`group cursor-pointer rounded-xl p-6 transition-all duration-300
                     ${formData?.budget === item.title 
-                      ? 'bg-orange-500 text-white shadow-lg scale-105' 
+                      ? 'bg-orange-600 text-white shadow-lg scale-105' 
                       : 'bg-white hover:bg-orange-50 border border-gray-200 hover:shadow-lg hover:scale-102'
                     }`}
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <item.icon className={`w-5 h-5 
-                      ${formData?.budget === item.title ? 'text-white' : 'text-orange-500'}`} 
+                      ${formData?.budget === item.title ? 'text-white' : 'text-orange-600'}`} 
                     />
                     <h3 className={`text-lg font-semibold
                       ${formData?.budget === item.title ? 'text-white' : 'text-gray-900'}`}>
@@ -373,7 +389,7 @@ const CreateTrip = () => {
           <CardContent className="p-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-3 bg-orange-50 rounded-full">
-                <Users className="w-6 h-6 text-orange-500" />
+                <Users className="w-6 h-6 text-orange-600" />
               </div>
               <h2 className="text-2xl font-medium text-gray-900">
                 Who's joining your journey?
@@ -392,7 +408,7 @@ const CreateTrip = () => {
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <item.icon className={`w-5 h-5 
-                      ${formData?.traveler === item.people ? 'text-white' : 'text-orange-500'}`} 
+                      ${formData?.traveler === item.people ? 'text-white' : 'text-orange-600'}`} 
                     />
                     <h3 className={`text-sm font-semibold
                       ${formData?.traveler === item.people ? 'text-white' : 'text-gray-900'}`}>
@@ -418,7 +434,7 @@ const CreateTrip = () => {
           <Button 
             onClick={OnGenerateTrip}
             disabled={loading}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl"
+            className="bg-orange-600 hover:bg-orange-600 text-white px-6 py-3 rounded-xl"
           >
             {loading ? (
               <AiOutlineLoading3Quarters className="animate-spin mr-2" />

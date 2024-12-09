@@ -1,47 +1,63 @@
 import React from 'react';
-import { Globe2, MessageSquare, Bell } from 'lucide-react';
+import { 
+  Twitter, 
+  Instagram, 
+  Linkedin 
+} from 'lucide-react';
 
-const DashboardFooter = ({router}) => {
-
-  const handleNavigation = (route) => {
-    router.navigate(route);
-  };
+const DashboardFooter = () => {
 
   return (
-    <footer className="bg-white shadow-md border-t border-slate-200 py-6 mt-20 ">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between">
-          {/* Company Info */}
-          <div className="w-[500px]">
-            <h4 className="font-bold text-lg mb-4 text-slate-800">TripMate AI</h4>
-            <p className="text-slate-600 text-sm">
-              Your AI-powered travel companion, creating personalized itineraries and helping you discover the world.
-            </p>
-          </div>
-
+    <div>
+    
+    <footer className="bg-gradient-to-br from-slate-50 to-slate-100 py-8 border-t border-slate-200">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+          {/* Brand Section */}
+          <div className="flex items-center space-x-3">
+          <h1 className="text-xl font-light tracking-tight text-gray-900">
+            Location<span className="font-bold text-red-500">Scout</span>
+          </h1>
           
-
-          {/* Contact & Social */}
-          <div>
-            <h4 className="font-bold text-lg mb-4 text-slate-800">Connect</h4>
-            <div className="flex space-x-4">
-              <a href="#" className="text-slate-600 hover:text-red-600">
-                <Globe2 className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-slate-600 hover:text-red-600">
-                <MessageSquare className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-slate-600 hover:text-red-600">
-                <Bell className="h-5 w-5" />
-              </a>
-            </div>
-            <p className="text-slate-500 text-xs mt-4">
-              © {new Date().getFullYear()} TripMate AI. All rights reserved.
-            </p>
           </div>
+          
+          {/* Social Media Links */}
+          <div className="flex space-x-10 ml-20 -mr-10">
+            <a 
+              href="https://x.com/Divyanshu6622" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-red-600 transition-colors"
+            >
+              <Twitter className="h-5 w-5" />
+            </a>
+            <a 
+              href="https://www.instagram.com/divyanshu_nagpal/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-red-600 transition-colors"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/divyanshu-nagpal-690a2b258/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-red-600 transition-colors"
+            >
+              <Linkedin className="h-5 w-5" />
+            </a>
+          </div>
+
+          {/* Copyright */}
+          <p className="text-slate-500 text-xs">
+            © {new Date().getFullYear()} LocationScout. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
+
+    </div>
   );
 };
 

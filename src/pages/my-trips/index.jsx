@@ -1,7 +1,7 @@
 import { db } from '@/service/firebaseConfig';
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from 'react-router-dom';
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import UserTripCardItem from './components/UserTripCardItem';
 
 function MyTrips() {
@@ -11,7 +11,9 @@ function MyTrips() {
     useEffect(()=>{
         GetUserTrips();
     },[])
-
+    useEffect(() => {
+        window.scrollTo(0, 0); 
+      }, []);
 
     //Used to Get all user Trips
     const GetUserTrips=async()=>{
@@ -23,7 +25,7 @@ function MyTrips() {
             return;
         }
 
-        const q=query(collection(db,'AITrips'),where('userEmail','==',user?.email));
+        const q=query(collection(db,'AITrips'),where('userEmail','==',user?.email),orderBy('id', 'desc'));
         const querySnapshot = await getDocs(q);
         setUserTrips([]);
         querySnapshot.forEach((doc) => {
@@ -35,8 +37,9 @@ function MyTrips() {
     }
 
 
+
   return (
-    <div className='sm:px-10 md:px-32 lg:px-40 xl:px-56 px-6 mt-10'>
+    <div className='sm:px-10 md:px-32 lg:px-40 xl:px-56 px-6 mt-10 mb-20'>
         <h2 className='font-bold text-3xl'>My Trips</h2>
 
         <div className='mt-10 grid grid-cols-2 md:grid-cols-3 gap-5'>

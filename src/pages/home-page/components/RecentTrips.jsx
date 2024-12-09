@@ -1,21 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, limit, getDocs, where } from 'firebase/firestore';
 import { db } from '@/service/firebaseConfig';// Ensure you have this firebase config file
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Calendar, Clock,User } from 'lucide-react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useNavigation } from "react-router-dom";
 import { SelectTravelList } from '@/constants/options';
 
 const RecentTrips = () => {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const navigation=useNavigation(); 
 
   useEffect(() => {
     const fetchRecentTrips = async () => {
       try {
-        const tripsRef = collection(db, 'AITrips');
+        const user=JSON.parse(localStorage.getItem('user'));
+        
+        if(!user)
+        {
+            navigation('/');
+            return;
+        }
+
+        const tripsRef=query(collection(db,'AITrips'),where('userEmail','==',user?.email));
+        // const tripsRef = collection(db, 'AITrips');
         const q = query(tripsRef, orderBy('id', 'desc'), limit(3));
         const querySnapshot = await getDocs(q);
         
