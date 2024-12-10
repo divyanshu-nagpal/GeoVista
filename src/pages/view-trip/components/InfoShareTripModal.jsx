@@ -102,11 +102,11 @@ function InfoShareTripModal({ trip, isOpen, onClose }) {
       doc.setFillColor(...CHARCOAL);
       doc.rect(0, 0, 210, 30, 'F');
       
-      // LocationScout Logo and Title
+      // GeoVista Logo and Title
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(22);
       doc.setFont("helvetica", "bold");
-      doc.text("LocationScout", 105, 15, { align: 'center' });
+      doc.text("GeoVista", 105, 15, { align: 'center' });
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
       doc.text("Your Travel Companion", 105, 22, { align: 'center' });
