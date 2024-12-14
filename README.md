@@ -43,11 +43,4 @@ Watch the functionality of GeoVista in action:
 [![image](https://github.com/user-attachments/assets/c935a3a9-857c-4c54-a8f7-7857e89389ee)](https://youtu.be/xkK47dYwpsM)
 
 
-<video src="src/assets/images/bbb1.mp4" controls="controls" style="max-width: 100%; height: auto;">
-    Your browser does not support the video tag.
-</video>
-
-
-
-
 ---
